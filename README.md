@@ -8,10 +8,14 @@ SO THAT my company can compete with other e-commerce companies
 
 ## Mock Up 
 
-![See Assets](Assets/Untitled_ May 18, 2021 7_47 AM.gif)
-![See Assets](Assets/Untitled_ May 19, 2021 8_16 AM.gif)
-![See Assets](Assets/Untitled_ May 19, 2021 8_08 AM.gif)
-![See Assets](Assets/Untitled_ May 19, 2021 8_29 AM.gif)
+**Live API docs with real sample responses: https://tferg7.github.io/E-Commerce-Back-End/**
+
+Walkthrough recordings (made before the 2026 bug fixes):
+
+![Starting the server](Assets/demo-start-server.gif)
+![Product routes](Assets/demo-products.gif)
+![Category routes](Assets/demo-categories.gif)
+![Tag routes](Assets/demo-tags.gif)
 
 ## Usage
 

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-Commerce Back End API</title>
+<meta name="description" content="An Express and Sequelize REST API for products, categories, and tags, with real sample responses.">
+<style>
+:root{--bg:#FBFAFE;--surface:#fff;--soft:#F3EFFA;--ink:#251B36;--muted:#6B6380;--line:#E4DEEF;--accent:#D9466F;--mint:#2E9C80;--gold:#B8871F;--blue:#3B6FD8}
+@media (prefers-color-scheme:dark){:root{--bg:#16111F;--surface:#1F1829;--soft:#2A2236;--ink:#F2EEF8;--muted:#B3AAC4;--line:#3A3048;--accent:#F06A8F;--mint:#4CC3A2;--gold:#E0B04A;--blue:#7DA2F2}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{padding:48px 0 24px}
+.eyebrow{font:600 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(32px,6vw,48px);line-height:1.1;margin:10px 0 12px}
+.lede{color:var(--muted);max-width:640px;margin:0 0 20px;font-size:18px}
+.links a{display:inline-block;margin:0 10px 10px 0;padding:10px 16px;border-radius:999px;text-decoration:none;font-weight:600;border:1px solid var(--line);color:var(--ink);background:var(--surface)}
+.links a.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0;padding:0;list-style:none}
+.chips li{background:var(--soft);border-radius:999px;padding:4px 12px;font:500 13px ui-monospace,Menlo,monospace}
+section{padding:24px 0}
+h2{font-size:24px;margin:0 0 14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:9px 8px;border-top:1px solid var(--line);vertical-align:top}
+tr:first-child td{border-top:0}
+code{font-family:ui-monospace,Menlo,monospace;font-size:14px}
+.m{display:inline-block;min-width:64px;text-align:center;border-radius:6px;padding:2px 6px;font:700 12px ui-monospace,Menlo,monospace;color:#fff}
+.m-get{background:var(--mint)}.m-post{background:var(--blue)}.m-put{background:var(--gold)}.m-delete{background:var(--accent)}
+.explorer{display:grid;grid-template-columns:260px 1fr;gap:16px}
+.tabs{display:flex;flex-direction:column;gap:6px}
+.tab{text-align:left;background:var(--soft);border:1px solid transparent;border-radius:10px;padding:8px 10px;cursor:pointer;color:var(--ink);font:14px ui-monospace,Menlo,monospace}
+.tab[aria-selected=true]{border-color:var(--accent);background:var(--surface)}
+pre{margin:0;background:#1d1726;color:#f3eefb;border-radius:14px;padding:16px;overflow:auto;max-height:480px;font-size:13px;line-height:1.5}
+.steps{padding-left:20px} .steps li{margin-bottom:8px}
+.table-scroll{overflow-x:auto}
+footer{color:var(--muted);font-size:14px;padding:32px 0 48px}
+@media (max-width:760px){.explorer{grid-template-columns:1fr}.tabs{flex-direction:row;overflow-x:auto}.tab{white-space:nowrap}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="eyebrow">REST API · Node.js</div>
+  <h1>E-Commerce Back End</h1>
+  <p class="lede">An Express and Sequelize API that manages an online store's products, categories, and tags in MySQL, including the many-to-many link between products and tags.</p>
+  <div class="links">
+    <a class="primary" href="https://github.com/tferg7/E-Commerce-Back-End">View the code</a>
+    <a href="https://tferg7.github.io">Back to portfolio</a>
+  </div>
+  <ul class="chips"><li>Express</li><li>Sequelize ORM</li><li>MySQL</li><li>dotenv</li></ul>
+</header>
+
+<main class="wrap">
+  <section aria-labelledby="try-h">
+    <h2 id="try-h">See real responses</h2>
+    <p>Captured by running this API against its seed data. Pick a request to see what it returns.</p>
+    <div class="card explorer">
+      <div class="tabs" role="tablist"><button class="tab" data-k="GET /categories" role="tab"><span class="m m-get">GET</span> /categories</button><button class="tab" data-k="GET /categories/1" role="tab"><span class="m m-get">GET</span> /categories/1</button><button class="tab" data-k="GET /products" role="tab"><span class="m m-get">GET</span> /products</button><button class="tab" data-k="GET /products/1" role="tab"><span class="m m-get">GET</span> /products/1</button><button class="tab" data-k="GET /tags" role="tab"><span class="m m-get">GET</span> /tags</button><button class="tab" data-k="GET /tags/1" role="tab"><span class="m m-get">GET</span> /tags/1</button><button class="tab" data-k="POST /products" role="tab"><span class="m m-post">POST</span> /products</button><button class="tab" data-k="PUT /categories/1" role="tab"><span class="m m-put">PUT</span> /categories/1</button><button class="tab" data-k="DELETE /tags/8" role="tab"><span class="m m-delete">DELETE</span> /tags/8</button></div>
+      <pre id="out" aria-live="polite"></pre>
+    </div>
+  </section>
+
+  <section aria-labelledby="ep-h">
+    <h2 id="ep-h">Endpoints</h2>
+    <div class="card table-scroll"><table><tr><td><span class="m m-get">GET</span></td><td><code>/api/categories</code></td><td>All categories with their products</td></tr>
+<tr><td><span class="m m-get">GET</span></td><td><code>/api/categories/:id</code></td><td>One category with its products</td></tr>
+<tr><td><span class="m m-post">POST</span></td><td><code>/api/categories</code></td><td>Create a category: { &quot;category_name&quot;: &quot;Jackets&quot; }</td></tr>
+<tr><td><span class="m m-put">PUT</span></td><td><code>/api/categories/:id</code></td><td>Rename a category</td></tr>
+<tr><td><span class="m m-delete">DELETE</span></td><td><code>/api/categories/:id</code></td><td>Delete a category</td></tr>
+<tr><td><span class="m m-get">GET</span></td><td><code>/api/products</code></td><td>All products with category and tags</td></tr>
+<tr><td><span class="m m-get">GET</span></td><td><code>/api/products/:id</code></td><td>One product with category and tags</td></tr>
+<tr><td><span class="m m-post">POST</span></td><td><code>/api/products</code></td><td>Create a product, optionally with tagIds</td></tr>
+<tr><td><span class="m m-put">PUT</span></td><td><code>/api/products/:id</code></td><td>Update a product and replace its tags</td></tr>
+<tr><td><span class="m m-delete">DELETE</span></td><td><code>/api/products/:id</code></td><td>Delete a product</td></tr>
+<tr><td><span class="m m-get">GET</span></td><td><code>/api/tags</code></td><td>All tags with their products</td></tr>
+<tr><td><span class="m m-get">GET</span></td><td><code>/api/tags/:id</code></td><td>One tag with its products</td></tr>
+<tr><td><span class="m m-post">POST</span></td><td><code>/api/tags</code></td><td>Create a tag</td></tr>
+<tr><td><span class="m m-put">PUT</span></td><td><code>/api/tags/:id</code></td><td>Rename a tag</td></tr>
+<tr><td><span class="m m-delete">DELETE</span></td><td><code>/api/tags/:id</code></td><td>Delete a tag</td></tr></table></div>
+  </section>
+
+  <section aria-labelledby="model-h">
+    <h2 id="model-h">Data model</h2>
+    <div class="card">
+      <p style="margin-top:0">Four tables: <code>category</code>, <code>product</code>, <code>tag</code>, and <code>product_tag</code>.</p>
+      <ul>
+        <li>A category <strong>has many</strong> products; each product <strong>belongs to</strong> one category.</li>
+        <li>Products and tags are <strong>many-to-many</strong> through <code>product_tag</code>.</li>
+        <li>Updating a product with <code>tagIds</code> adds new tag links and removes the ones you left out.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="run-h">
+    <h2 id="run-h">Run it locally</h2>
+    <div class="card">
+      <ol class="steps">
+        <li>Install Node.js and MySQL, then <code>cd Develop &amp;&amp; npm install</code>.</li>
+        <li>Create the database: <code>mysql -u root -p &lt; db/schema.sql</code></li>
+        <li>Copy <code>.env.EXAMPLE</code> to <code>.env</code> and add your MySQL user and password.</li>
+        <li>Seed sample data: <code>node seeds/index.js</code></li>
+        <li>Start the API: <code>npm start</code>, then call the endpoints at <code>http://localhost:3001/api</code> with Insomnia, Postman, or curl.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+<footer class="wrap">Built by Tyra Ferguson · <a href="https://github.com/tferg7">github.com/tferg7</a></footer>
+<script>
+const SAMPLES = {"GET /categories": [{"id": 1, "category_name": "Shirts", "products": [{"id": 1, "product_name": "Plain T-Shirt", "price": 14.99, "stock": 14, "category_id": 1}]}, {"id": 2, "category_name": "Shorts", "products": [{"id": 5, "product_name": "Cargo Shorts", "price": 29.99, "stock": 22, "category_id": 2}]}, {"id": 3, "category_name": "Music", "products": [{"id": 4, "product_name": "Top 40 Music Compilation Vinyl Record", "price": 12.99, "stock": 50, "category_id": 3}]}, {"id": 4, "category_name": "Hats", "products": [{"id": 3, "product_name": "Branded Baseball Hat", "price": 22.99, "stock": 12, "category_id": 4}]}, {"id": 5, "category_name": "Shoes", "products": [{"id": 2, "product_name": "Running Sneakers", "price": 90, "stock": 25, "category_id": 5}]}], "GET /categories/1": {"id": 1, "category_name": "Shirts", "products": [{"id": 1, "product_name": "Plain T-Shirt", "price": 14.99, "stock": 14, "category_id": 1}]}, "GET /products": [{"id": 1, "product_name": "Plain T-Shirt", "price": 14.99, "stock": 14, "category_id": 1, "category": {"id": 1, "category_name": "Shirts"}, "tags": [{"id": 6, "tag_name": "white", "product_tag": {"id": 1, "product_id": 1, "tag_id": 6}}, {"id": 7, "tag_name": "gold", "product_tag": {"id": 2, "product_id": 1, "tag_id": 7}}, {"id": 8, "tag_name": "pop culture", "product_tag": {"id": 3, "product_id": 1, "tag_id": 8}}]}, {"id": 2, "product_name": "Running Sneakers", "price": 90, "stock": 25, "category_id": 5, "category": {"id": 5, "category_name": "Shoes"}, "tags": [{"id": 6, "tag_name": "white", "product_tag": {"id": 4, "product_id": 2, "tag_id": 6}}]}, {"id": 3, "product_name": "Branded Baseball Hat", "price": 22.99, "stock": 12, "category_id": 4, "category": {"id": 4, "category_name": "Hats"}, "tags": [{"id": 1, "tag_name": "rock music", "product_tag": {"id": 5, "product_id": 3, "tag_id": 1}}, {"id": 3, "tag_name": "blue", "product_tag": {"id": 6, "product_id": 3, "tag_id": 3}}, {"id": 4, "tag_name": "red", "product_tag": {"id": 7, "product_id": 3, "tag_id": 4}}, {"id": 5, "tag_name": "green", "product_tag": {"id": 8, "product_id": 3, "tag_id": 5}}]}, {"id": 4, "product_name": "Top 40 Music Compilation Vinyl Record", "price": 12.99, "stock": 50, "category_id": 3, "category": {"id": 3, "category_name": "Music"}, "tags": [{"id": 1, "tag_name": "rock music", "product_tag": {"id": 9, "product_id": 4, "tag_id": 1}}, {"id": 2, "tag_name": "pop music", "product_tag": {"id": 10, "product_id": 4, "tag_id": 2}}, {"id": 8, "tag_name": "pop culture", "product_tag": {"id": 11, "product_id": 4, "tag_id": 8}}]}, {"id": 5, "product_name": "Cargo Shorts", "price": 29.99, "stock": 22, "category_id": 2, "category": {"id": 2, "category_name": "Shorts"}, "tags": [{"id": 3, "tag_name": "blue", "product_tag": {"id": 12, "product_id": 5, "tag_id": 3}}]}], "GET /products/1": {"id": 1, "product_name": "Plain T-Shirt", "price": 14.99, "stock": 14, "category_id": 1, "category": {"id": 1, "category_name": "Shirts"}, "tags": [{"id": 6, "tag_name": "white", "product_tag": {"id": 1, "product_id": 1, "tag_id": 6}}, {"id": 7, "tag_name": "gold", "product_tag": {"id": 2, "product_id": 1, "tag_id": 7}}, {"id": 8, "tag_name": "pop culture", "product_tag": {"id": 3, "product_id": 1, "tag_id": 8}}]}, "GET /tags": [{"id": 1, "tag_name": "rock music", "products": [{"id": 3, "product_name": "Branded Baseball Hat", "price": 22.99, "stock": 12, "category_id": 4, "product_tag": {"id": 5, "product_id": 3, "tag_id": 1}}, {"id": 4, "product_name": "Top 40 Music Compilation Vinyl Record", "price": 12.99, "stock": 50, "category_id": 3, "product_tag": {"id": 9, "product_id": 4, "tag_id": 1}}]}, {"id": 2, "tag_name": "pop music", "products": [{"id": 4, "product_name": "Top 40 Music Compilation Vinyl Record", "price": 12.99, "stock": 50, "category_id": 3, "product_tag": {"id": 10, "product_id": 4, "tag_id": 2}}]}, {"id": 3, "tag_name": "blue", "products": [{"id": 3, "product_name": "Branded Baseball Hat", "price": 22.99, "stock": 12, "category_id": 4, "product_tag": {"id": 6, "product_id": 3, "tag_id": 3}}, {"id": 5, "product_name": "Cargo Shorts", "price": 29.99, "stock": 22, "category_id": 2, "product_tag": {"id": 12, "product_id": 5, "tag_id": 3}}]}, {"id": 4, "tag_name": "red", "products": [{"id": 3, "product_name": "Branded Baseball Hat", "price": 22.99, "stock": 12, "category_id": 4, "product_tag": {"id": 7, "product_id": 3, "tag_id": 4}}]}, {"id": 5, "tag_name": "green", "products": [{"id": 3, "product_name": "Branded Baseball Hat", "price": 22.99, "stock": 12, "category_id": 4, "product_tag": {"id": 8, "product_id": 3, "tag_id": 5}}]}, {"id": 6, "tag_name": "white", "products": [{"id": 1, "product_name": "Plain T-Shirt", "price": 14.99, "stock": 14, "category_id": 1, "product_tag": {"id": 1, "product_id": 1, "tag_id": 6}}, {"id": 2, "product_name": "Running Sneakers", "price": 90, "stock": 25, "category_id": 5, "product_tag": {"id": 4, "product_id": 2, "tag_id": 6}}]}, {"id": 7, "tag_name": "gold", "products": [{"id": 1, "product_name": "Plain T-Shirt", "price": 14.99, "stock": 14, "category_id": 1, "product_tag": {"id": 2, "product_id": 1, "tag_id": 7}}]}, {"id": 8, "tag_name": "pop culture", "products": [{"id": 1, "product_name": "Plain T-Shirt", "price": 14.99, "stock": 14, "category_id": 1, "product_tag": {"id": 3, "product_id": 1, "tag_id": 8}}, {"id": 4, "product_name": "Top 40 Music Compilation Vinyl Record", "price": 12.99, "stock": 50, "category_id": 3, "product_tag": {"id": 11, "product_id": 4, "tag_id": 8}}]}], "GET /tags/1": {"id": 1, "tag_name": "rock music", "products": [{"id": 3, "product_name": "Branded Baseball Hat", "price": 22.99, "stock": 12, "category_id": 4, "product_tag": {"id": 5, "product_id": 3, "tag_id": 1}}, {"id": 4, "product_name": "Top 40 Music Compilation Vinyl Record", "price": 12.99, "stock": 50, "category_id": 3, "product_tag": {"id": 9, "product_id": 4, "tag_id": 1}}]}, "POST /products": {"id": 6, "product_name": "Basketball", "price": 200, "stock": 3, "category_id": 4}, "PUT /categories/1": [1], "DELETE /tags/8": 1};
+const out = document.getElementById('out');
+const tabs = document.querySelectorAll('.tab');
+function show(btn) {
+  tabs.forEach(t => t.setAttribute('aria-selected', t === btn));
+  out.textContent = JSON.stringify(SAMPLES[btn.dataset.k], null, 2);
+}
+tabs.forEach(t => t.addEventListener('click', () => show(t)));
+show(tabs[0]);
+</script>
+</body>
+</html>
