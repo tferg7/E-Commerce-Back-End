@@ -32,7 +32,13 @@ router.get('/:id', (req, res) => {
       },
     ]
   })
-  .then(dbCategoryData => res.json(dbCategoryData))
+  .then(dbCategoryData => {
+    if (!dbCategoryData) {
+      res.status(404).json({ message: "No Category found with that ID" });
+      return;
+    }
+    res.json(dbCategoryData);
+  })
   .catch(err => {
     console.log(err);
     res.status(500).json(err);
@@ -46,7 +52,8 @@ router.post('/', (req, res) => {
     res.json(newCategory);
   })
   .catch((err) => {
-    res.json(err);
+    console.log(err);
+    res.status(400).json(err);
   });
 });
 
@@ -59,8 +66,8 @@ router.put('/:id', (req, res) => {
     },
     }
   )
-  .then(categoryData => {
-    if(!categoryData) {
+  .then((categoryData) => {
+    if (!categoryData[0]) {
       res.status(404).json({ message: "No Category found with that ID "});
       return;
     }
@@ -80,9 +87,16 @@ router.delete('/:id', (req, res) => {
       },
     })
       .then((deletedCategory) => {
+        if (!deletedCategory) {
+          res.status(404).json({ message: "No Category found with that ID" });
+          return;
+        }
         res.json(deletedCategory);
       })
-      .catch((err) => res.json(err));
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
 });
 
 module.exports = router;
